@@ -1,13 +1,27 @@
 import React,{useState} from "react";
 import { Text, View, TextInput, StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
-
+import './firebase';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 const WordInput = () => {
+
     const [inputText, setText] = useState('');
     const inputHandler = (str)=>{
         setText(str);
     };
+   
+    const addData=()=>{
+      if(inputText == ''){
+        console.log('empty input');
+      }else{
+        firebase.firestore().collection("WordList").doc().set({
+        word: inputText
+      });
+      }
+      
+    }
   return (
     <View
       style={{
@@ -29,7 +43,7 @@ const WordInput = () => {
         color="#CC0022"
         style={{marginHorizontal:10}}
         size={40}
-        onPress={() => console.log(inputText)}
+        onPress={addData}
       />
     </View>
   );
