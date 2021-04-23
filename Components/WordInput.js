@@ -1,27 +1,29 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { Text, View, TextInput, StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
-import './firebase';
-import * as firebase from 'firebase';
-import 'firebase/firestore';
+import "../Classes/firebase";
+import * as firebase from "firebase";
+import "firebase/firestore";
 
 const WordInput = () => {
+  const [inputText, setText] = useState("");
+  const inputHandler = (str) => {
+    setText(str);
+  };
 
-    const [inputText, setText] = useState('');
-    const inputHandler = (str)=>{
-        setText(str);
-    };
-   
-    const addData=()=>{
-      if(inputText == ''){
-        console.log('empty input');
-      }else{
-        firebase.firestore().collection("WordList").doc().set({
-        word: inputText
+  const addData = () => {
+    if (inputText == "") {
+      console.log("empty input");
+    } else {
+      firebase.firestore().collection("WordList").doc().set({
+        createdOn: firebase.firestore.Timestamp.now(),
+        word: inputText,
       });
-      }
-      
+      inputHandler(null);
     }
+  };
+
+  // CommonJS
   return (
     <View
       style={{
@@ -32,16 +34,17 @@ const WordInput = () => {
     >
       <TextInput
         style={styles.Input}
+        autoCapitalize="words"
         placeholder="Add new word."
         placeholderTextColor="#8798AD"
         onChangeText={inputHandler}
-        value = {inputText}
+        value={inputText}
       />
       <Icon
         name="add-circle"
         type="ionicon"
         color="#CC0022"
-        style={{marginHorizontal:10}}
+        style={{ marginHorizontal: 10 }}
         size={40}
         onPress={addData}
       />
@@ -51,8 +54,8 @@ const WordInput = () => {
 
 const styles = StyleSheet.create({
   Input: {
-    flex:1,
-    marginRight:20,
+    flex: 1,
+    marginRight: 20,
     borderWidth: 1,
     borderColor: "#8798AD",
     borderRadius: 13,
